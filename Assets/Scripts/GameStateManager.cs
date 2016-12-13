@@ -5,9 +5,11 @@ public class GameStateManager : MonoBehaviour {
 
     public enum GameStates
     {
+        mainMenu,
         prePlay,
         play,
         pause,
+        endGame
     }
 
     //int previousState;
@@ -17,6 +19,12 @@ public class GameStateManager : MonoBehaviour {
     int stateToBe;
 
     public static GameStateManager m_instance;
+
+    [SerializeField]
+    GameObject mainMenuRef;
+
+    [SerializeField]
+    GameObject mainMenu;
 
     [SerializeField]
     GameObject levelManagerRef;
@@ -35,9 +43,9 @@ public class GameStateManager : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        
-        gameState = (int)GameStates.prePlay;
-        stateToBe = (int)GameStates.prePlay;
+
+        gameState = -245;//(int)GameStates.mainMenu;
+        stateToBe = (int)GameStates.mainMenu;
 	}
 	
 	// Update is called once per frame
@@ -51,9 +59,20 @@ public class GameStateManager : MonoBehaviour {
             {
                 OnExitPrePlay();
             }
+            if(gameState == (int)GameStates.mainMenu)
+            {
+                OnExitMainMenu();
+            }
 
             //check the enter function of the game state
-
+            if(stateToBe == (int)GameStates.endGame)
+            {
+                Application.Quit();
+            }
+            if(stateToBe == (int)GameStates.mainMenu)
+            {
+                OnEnterMainMenu();
+            }
             if(stateToBe == (int)GameStates.prePlay)
             {
                 OnEnterPrePlay();
@@ -85,6 +104,16 @@ public class GameStateManager : MonoBehaviour {
     public void ChangeState(GameStates stateToChangeTo)
     {
         stateToBe = (int)stateToChangeTo;
+    }
+
+    void OnEnterMainMenu()
+    {
+        mainMenu = Instantiate(mainMenuRef);
+    }
+
+    void OnExitMainMenu()
+    {
+
     }
 
     void OnEnterPrePlay()
