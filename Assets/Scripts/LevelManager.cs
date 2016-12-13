@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour {
 
-    private static LevelManager m_instance;
+    public static LevelManager m_instance;
+
+    public int stage;
+
     [SerializeField]
     GameObject testLevelReference;
     [SerializeField]
