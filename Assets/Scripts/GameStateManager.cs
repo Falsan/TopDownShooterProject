@@ -18,6 +18,8 @@ public class GameStateManager : MonoBehaviour {
     [SerializeField]
     int stateToBe;
 
+    //int stageCounter;
+
     public static GameStateManager m_instance;
 
     [SerializeField]
@@ -95,8 +97,16 @@ public class GameStateManager : MonoBehaviour {
     {
         if(gameState == (int)GameStates.prePlay)
         {
-            levelManager = Instantiate(levelManagerRef);
-            stateToBe = (int)GameStates.play;
+            if (LevelManager.m_instance == null)
+            {
+                levelManager = Instantiate(levelManagerRef);
+                //stateToBe = (int)GameStates.play;
+            }
+            if(LevelManager.m_instance.stage == 0)
+            {
+                //make the level
+                //set to play
+            }
             //previousState = (int)GameStates.prePlay;
         }
     }
@@ -104,6 +114,12 @@ public class GameStateManager : MonoBehaviour {
     public void ChangeState(GameStates stateToChangeTo)
     {
         stateToBe = (int)stateToChangeTo;
+    }
+
+    public void NextStage(int stageToBe)
+    {
+        LevelManager.m_instance.stage = stageToBe;
+        stateToBe = (int)GameStates.prePlay;
     }
 
     void OnEnterMainMenu()

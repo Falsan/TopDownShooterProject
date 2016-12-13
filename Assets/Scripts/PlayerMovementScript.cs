@@ -7,79 +7,52 @@ public class PlayerMovementScript : MonoBehaviour
     [SerializeField]
     Rigidbody2D m_rigidBody;
 
-    Vector2 jumpForce;
-    Vector2 leftForce;
-    Vector2 rightForce;
+    Vector3 up;
+    Vector3 left;
+    Vector3 right;
+    Vector3 down;
+    Vector3 var;
+    Vector3 moveVector;
     float drag;
-    [SerializeField]
-    int jumpCounter;
-    bool touchingGround;
 
     // Use this for initialization
     void Start()
     {
         m_rigidBody = gameObject.GetComponent<Rigidbody2D>();
-        jumpForce = new Vector2(0.0f, 3000.0f);
-        leftForce = new Vector2(-100.0f, 0.0f);
-        rightForce = new Vector2(100.0f, 0.0f);
+        up = new Vector3(0.0f, 100.0f);
+        left = new Vector3(-100.0f, 0.0f);
+        right = new Vector3(100.0f, 0.0f);
+        down = new Vector3(0.0f, -100.0f);
+        moveVector = new Vector3(0.0f, 0.0f);
         drag = 50.0f;
         m_rigidBody.drag = (drag);
-        jumpCounter = 0;
-        touchingGround = true;
         m_rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
-
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.W) && jumpCounter != 1)
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            jumpCounter++;
-            m_rigidBody.AddForce(jumpForce);
-            touchingGround = false;
-            //m_rigidBody.drag = (drag);
+            moveVector = up;
+            m_rigidBody.AddForce(moveVector);
         }
-        else if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            m_rigidBody.AddForce(leftForce);
-            m_rigidBody.drag = (drag);
+            moveVector = down;
+            m_rigidBody.AddForce(moveVector);
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            m_rigidBody.AddForce(rightForce);
-            m_rigidBody.drag = (drag);
+            moveVector = left;
+            m_rigidBody.AddForce(moveVector);
+        }
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            moveVector = right;
+            m_rigidBody.AddForce(moveVector);
         }
 
-        if(touchingGround == false)
-        {
-            m_rigidBody.gravityScale = 10.0f;
-        }
-        touchingGround = false;
     }
 
-
-    void OnCollisionStay2D(Collision2D collider)
-    {
-        if(collider.gameObject.tag == "Ground")
-        {
-            m_rigidBody.drag = (50.0f);
-            //float difference = transform.position.y;
-            m_rigidBody.gravityScale = 0.0f;
-            // transform.Translate(0.0f, difference, 0.0f);
-            //m_rigidBody.drag = (0.0f);
-            jumpCounter = 0;
-            touchingGround = true;
-        }
-        
-       
-       /* if(transform.position.y > -0.0f)
-        {
-            
-        }
-        else if (transform.position.y < 0.0f)
-        {
-           
-        }*/
-    }
 }
